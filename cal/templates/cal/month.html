@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<link href="bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 <a href= "{% url 'cal.views.month' year=year month=month change="prev" %}">&lt;&lt; Prev</a>
 <a href= "{% url 'cal.views.month' year=year month=month change="next" %}">Next &gt;&gt;</a>
 
@@ -63,3 +64,4 @@
 
     <div class="clear"></div>
 </div>
+<a href="{% url 'cal.views.main' year %}">Back</a>

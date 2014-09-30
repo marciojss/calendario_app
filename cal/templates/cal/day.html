@@ -1,4 +1,5 @@
 <h4>My Entries</h4>
+<link href="bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 <form action="{% url 'cal.views.day' year month day %}" method="POST"> {% csrf_token %}
 
 {{ entries.management_form }}
@@ -16,4 +17,6 @@
     </div>
 {% endfor %}
 
-<input type="submit" value="Save" /> </form>
+<input type="submit" value="Save" />
+<a href="{% url 'cal.views.month' year month %}">Back</a>
+ </form>
