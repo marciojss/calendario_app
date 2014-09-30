@@ -17,23 +17,23 @@
 {% endif %}
 
 <h4>{{ mname }} {{ year }}</h4>
-
-<div class="month">
+<div class="container col-lg-12 col-md-12 col-sm-12 col-xs-12">
+<div class="month col-lg-7 col-md-7 col-sm-7 col-xs-7">
     <table class="table table-bordered">
 
 
     <tr>
-        <td class="empty">Mon</td>
-        <td class="empty">Tue</td>
-        <td class="empty">Wed</td>
-        <td class="empty">Thu</td>
-        <td class="empty">Fri</td>
-        <td class="empty">Sat</td>
-        <td class="empty">Sun</td>
+        <td class="empty col-lg-1 col-md-1 col-sm-1 col-xs-1">Mon</td>
+        <td class="empty col-lg-1 col-md-1 col-sm-1 col-xs-1">Tue</td>
+        <td class="empty col-lg-1 col-md-1 col-sm-1 col-xs-1">Wed</td>
+        <td class="empty col-lg-1 col-md-1 col-sm-1 col-xs-1">Thu</td>
+        <td class="empty col-lg-1 col-md-1 col-sm-1 col-xs-1">Fri</td>
+        <td class="empty col-lg-1 col-md-1 col-sm-1 col-xs-1">Sat</td>
+        <td class="empty col-lg-1 col-md-1 col-sm-1 col-xs-1">Sun</td>
     </tr>
 
     {% for week in month_days %}
-        <tr>
+        <tr class="">
         {% for day, entries, current in week %}
 
             <!-- TD style: empty | day | current; onClick handler and highlight  -->
@@ -68,5 +68,6 @@
     </table>
 
     <div class="clear"></div>
+</div>
 </div>
 <a href="{% url 'cal.views.main' year %}">Back</a>
