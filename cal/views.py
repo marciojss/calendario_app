@@ -71,16 +71,16 @@ def main(request, year=None):
 
 def month(request, year, month, change=None):
     """Listing of days in `month`."""
-    import ipdb; ipdb.set_trace()
+    #import ipdb; ipdb.set_trace()
     year, month = int(year), int(month)
 
     # apply next / previous change
-    if change in ("next", "prev"):
-        now, mdelta = date(year, month, 15), timedelta(days=31)
-        if change == "next":   mod = mdelta
-        elif change == "prev": mod = -mdelta
-
-        year, month = (now+mod).timetuple()[:2]
+    #if change in ("next", "prev"):
+   #     now, mdelta = date(year, month, 15), timedelta(days=31)
+  #      if change == "next":   mod = mdelta
+ #       elif change == "prev": mod = -mdelta
+#
+        #year, month = (now+mod).timetuple()[:2]
 
     # init variables
     cal = calendar.Calendar()
@@ -105,8 +105,7 @@ def month(request, year, month, change=None):
             lst.append([])
             week += 1
 
-    return render_to_response("cal/month.html", dict(year=year, month=month, user=request.user,
-                        month_days=lst, mname=mnames[month-1], reminders=reminders(request)))
+    return render_to_response("cal/month.html", dict(year=year, month=month, user=request.user, month_days=lst, mname=mnames[month-1], reminders=reminders(request)))
 
 def day(request, year, month, day):
     """Entries for the day."""
