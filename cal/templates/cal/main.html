@@ -7,15 +7,22 @@
     {% for year, months in years %}
         <div class="clear"></div>
         <h4>{{ year }}</h4>
-        {% for month in months %}
-            <div class=
-            "{% if month.current %}"current"{% endif %}
-            {% if not month.current %}"month"{% endif %}" >
-                {% if month.entry %}<b>{% endif %}
-                <a href="{% url 'month' year month.n %}">{{ month.name }}</a>
-                {% if month.entry %}</b>{% endif %}
-            </div>
+            <table>
+            <tr>
+            {% for month in months %}
+                <!--{% if month.n == 0 %}{% endif %}-->
+                <div class=
+                {% if month.current %}"current"{% endif %}
+                {% if not month.current %}"month"{% endif %} >
+                    <td>
+                        {% if month.entry %}<b>{% endif %}
+                            <a href="{% url 'month' year=year month=month.n %}">{{ month.name }}</a>
+                        {% if month.entry %}</b>{% endif %}
+                    </td>
+                </div>
 
-            {% if month.n == 6 %}<br />{% endif %}
-        {% endfor %}
+                {% if month.n == 6 %}</tr><tr>{% endif %}
+            {% endfor %}
+            </tr>
+        </table>
     {% endfor %}

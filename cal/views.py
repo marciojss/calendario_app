@@ -71,6 +71,7 @@ def main(request, year=None):
 
 def month(request, year, month, change=None):
     """Listing of days in `month`."""
+    import ipdb; ipdb.set_trace()
     year, month = int(year), int(month)
 
     # apply next / previous change
