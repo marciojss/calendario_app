@@ -1,5 +1,10 @@
 <!DOCTYPE html>
-<link href="bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+{% load staticfiles %}
+<head>
+    <link href="{% static 'bootstrap.css' %}" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+</head>
 <a href= "{% url 'cal.views.month' year=year month=month change="prev" %}">&lt;&lt; Prev</a>
 <a href= "{% url 'cal.views.month' year=year month=month change="next" %}">Next &gt;&gt;</a>
 
@@ -14,7 +19,7 @@
 <h4>{{ mname }} {{ year }}</h4>
 
 <div class="month">
-    <table>
+    <table class="table table-bordered">
 
 
     <tr>

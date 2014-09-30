@@ -1,6 +1,8 @@
 <!DOCTYPE html>
+<html>
+{% load staticfiles %}
 <head>
-    <link href="bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{% static 'bootstrap.css' %}" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
 </head>
@@ -26,3 +28,4 @@
                 </tr>
         </table>
     {% endfor %}
+</html>
