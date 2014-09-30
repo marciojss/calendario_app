@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<a href= "{% url 'cal.views.month' year month "prev" %}">&lt;&lt; Prev</a>
-<a href= "{% url 'cal.views.month' year month "next" %}">Next &gt;&gt;</a>
+<a href= "{% url 'cal.views.month' year=year month=month change="prev" %}">&lt;&lt; Prev</a>
+<a href= "{% url 'cal.views.month' year=year month=month change="next" %}">Next &gt;&gt;</a>
 
 {% if reminders %}
 <div class="reminders">

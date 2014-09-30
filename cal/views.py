@@ -71,16 +71,15 @@ def main(request, year=None):
 
 def month(request, year, month, change=None):
     """Listing of days in `month`."""
-    #import ipdb; ipdb.set_trace()
     year, month = int(year), int(month)
 
     # apply next / previous change
-    #if change in ("next", "prev"):
-   #     now, mdelta = date(year, month, 15), timedelta(days=31)
-  #      if change == "next":   mod = mdelta
- #       elif change == "prev": mod = -mdelta
-#
-        #year, month = (now+mod).timetuple()[:2]
+    if change in ("next", "prev"):
+        now, mdelta = date(year, month, 15), timedelta(days=31)
+        if change == "next":   mod = mdelta
+        elif change == "prev": mod = -mdelta
+
+        year, month = (now+mod).timetuple()[:2]
 
     # init variables
     cal = calendar.Calendar()
@@ -114,7 +113,7 @@ def day(request, year, month, day):
     other_entries = []
     if _show_users(request):
         other_entries = Entry.objects.filter(date__year=year, date__month=month,
-                                       date__day=day).exclude(creator=request.user)
+                                       date__day=day).exclude(creator=request.user.id)
 
     if request.method == 'POST':
         formset = EntriesFormset(request.POST)
@@ -122,7 +121,7 @@ def day(request, year, month, day):
             # add current user and date to each entry & save
             entries = formset.save(commit=False)
             for entry in entries:
-                entry.creator = request.user
+                entry.creator = request.user.id
                 entry.date = date(int(year), int(month), int(day))
                 entry.save()
             return HttpResponseRedirect(reverse("cal.views.month", args=(year, month)))
@@ -130,7 +129,7 @@ def day(request, year, month, day):
     else:
         # display formset for existing enties and one extra form
         formset = EntriesFormset(queryset=Entry.objects.filter(date__year=year,
-            date__month=month, date__day=day, creator=request.user))
+            date__month=month, date__day=day, creator=request.user.id))
     return render_to_response("cal/day.html", add_csrf(request, entries=formset, year=year,
             month=month, day=day, other_entries=other_entries, reminders=reminders(request)))
 

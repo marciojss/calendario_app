@@ -1,5 +1,5 @@
 <h4>My Entries</h4>
-<form action="{% url cal.views.day year month day %}" method="POST"> {% csrf_token %}
+<form action="{% url 'cal.views.day' year month day %}" method="POST"> {% csrf_token %}
 
 {{ entries.management_form }}
 
