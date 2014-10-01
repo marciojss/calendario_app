@@ -35,11 +35,14 @@ def reminders(request):
     """Return the list of reminders for today and tomorrow."""
     year, month, day = time.localtime()[:3]
     reminders = Entry.objects.filter(date__year=year, date__month=month,
-                                   date__day=day, creator=request.user.id, remind=True)
+                                   date__day=day, creator=request.user, remind=True)
     tomorrow = datetime.now() + timedelta(days=1)
     year, month, day = tomorrow.timetuple()[:3]
     return list(reminders) + list(Entry.objects.filter(date__year=year, date__month=month,
-                                   date__day=day, creator=request.user.id, remind=True))
+                                   date__day=day, creator=request.user, remind=True))
+
+def login(request):
+    """Login page."""
 
 def main(request, year=None):
     """Main listing, years and months; three years per page."""
@@ -57,7 +60,7 @@ def main(request, year=None):
             entry = current = False   # are there entry(s) for this month; current month?
             entries = Entry.objects.filter(date__year=y, date__month=n+1)
             if not _show_users(request):
-                entries = entries.filter(creator=request.user.id)
+                entries = entries.filter(creator=request.user)
 
             if entries:
                 entry = True
@@ -113,7 +116,7 @@ def day(request, year, month, day):
     other_entries = []
     if _show_users(request):
         other_entries = Entry.objects.filter(date__year=year, date__month=month,
-                                       date__day=day).exclude(creator=request.user.id)
+                                       date__day=day).exclude(creator=request.user)
 
     if request.method == 'POST':
         formset = EntriesFormset(request.POST)
@@ -121,7 +124,7 @@ def day(request, year, month, day):
             # add current user and date to each entry & save
             entries = formset.save(commit=False)
             for entry in entries:
-                entry.creator = request.user.id
+                entry.creator = request.user
                 entry.date = date(int(year), int(month), int(day))
                 entry.save()
             return HttpResponseRedirect(reverse("cal.views.month", args=(year, month)))
@@ -129,7 +132,7 @@ def day(request, year, month, day):
     else:
         # display formset for existing enties and one extra form
         formset = EntriesFormset(queryset=Entry.objects.filter(date__year=year,
-            date__month=month, date__day=day, creator=request.user.id))
+            date__month=month, date__day=day, creator=request.user))
     return render_to_response("cal/day.html", add_csrf(request, entries=formset, year=year,
             month=month, day=day, other_entries=other_entries, reminders=reminders(request)))
 
