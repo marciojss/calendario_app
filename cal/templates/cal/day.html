@@ -12,7 +12,6 @@
 {% for entry in entries.forms %}
     {{ entry.id }}
     <div class="entry">
-        <div class="del">Delete {{ entry.DELETE }}</div>
         <div id="inp1">
             <p>Title: {{ entry.title }}</p>
             <p>Snippet: {{ entry.snippet }}</p>
@@ -20,6 +19,7 @@
         <p>Remind: {{ entry.remind }}</p>
         {{ entry.body }}
     </div>
+    <button class="btn btn-danger">Delete {{ entry.DELETE }}</button>
 {% endfor %}
 
 <input type="submit" value="Save" />

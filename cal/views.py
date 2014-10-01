@@ -41,9 +41,8 @@ def reminders(request):
     return list(reminders) + list(Entry.objects.filter(date__year=year, date__month=month,
                                    date__day=day, creator=request.user, remind=True))
 
-def login(request):
-    """Login page."""
 
+@login_required
 def main(request, year=None):
     """Main listing, years and months; three years per page."""
     # prev / next years
@@ -72,20 +71,25 @@ def main(request, year=None):
     return render_to_response("cal/main.html", dict(years=lst, user=request.user, year=year,
                                                    reminders=reminders(request)))
 
-def month(request, year, month, change=None):
+
+@login_required
+def month(request, year=datetime.now().year, month=datetime.now().month, change=None):
     """Listing of days in `month`."""
     year, month = int(year), int(month)
 
     # apply next / previous change
     if change in ("next", "prev"):
         now, mdelta = date(year, month, 15), timedelta(days=31)
-        if change == "next":   mod = mdelta
-        elif change == "prev": mod = -mdelta
+        if change == "next":
+            mod = mdelta
+        elif change == "prev":
+            mod = -mdelta
 
         year, month = (now+mod).timetuple()[:2]
 
     # init variables
     cal = calendar.Calendar()
+    # import ipdb; ipdb.set_trace()
     month_days = cal.itermonthdays(year, month)
     nyear, nmonth, nday = time.localtime()[:3]
     lst = [[]]
@@ -109,6 +113,8 @@ def month(request, year, month, change=None):
 
     return render_to_response("cal/month.html", dict(year=year, month=month, user=request.user, month_days=lst, mname=mnames[month-1], reminders=reminders(request)))
 
+
+@login_required
 def day(request, year, month, day):
     """Entries for the day."""
     EntriesFormset = modelformset_factory(Entry, extra=1, exclude=("creator", "date"),
