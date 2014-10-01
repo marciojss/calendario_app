@@ -19,9 +19,9 @@
         <p>Remind: {{ entry.remind }}</p>
         {{ entry.body }}
     </div>
-    <button class="btn btn-danger">Delete {{ entry.DELETE }}</button>
+        <button class="btn btn-danger" value="{{ entry.DELETE }}">Delete</button>
 {% endfor %}
 
-<input type="submit" value="Save" />
+<input class="btn btn-default" type="submit" value="Save" />
 <a href="{% url 'cal.views.month' year month %}">Back</a>
  </form>
