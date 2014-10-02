@@ -2,8 +2,6 @@
 {% load staticfiles %}
 <head>
     <link href="{% static 'bootstrap.css' %}" rel="stylesheet">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="{% static 'bootstrap.min.js' %}"></script>
 </head>
 <form action="{% url 'cal.views.day' year month day %}" method="POST"> {% csrf_token %}
 

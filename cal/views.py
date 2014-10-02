@@ -1,24 +1,21 @@
+# -*- coding: utf-8 -*-
 import time
 import calendar
 from datetime import date, datetime, timedelta
 
-from django.core.urlresolvers import reverse
-from django.core.urlresolvers import reverse_lazy
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect, HttpResponse
-from django.shortcuts import get_object_or_404, render_to_response
+from django.shortcuts import render_to_response
 from django.core.context_processors import csrf
 from django.forms.models import modelformset_factory
-from django.template import RequestContext
 from cal.models import Entry
-from django.views.generic import CreateView, UpdateView, DeleteView
-import requests
+from django.http import HttpResponseRedirect
+from django.views.generic import CreateView, UpdateView, DeleteView, DetailView
+from cal.forms import EntryForm
 
 
-mnames = "January February March April May June July August September October November December"
+mnames = u"Janeiro Fevereiro Março Abril Maio Junho Julho Agosto Setembro Outubro Novembro Dezembro"
 mnames = mnames.split()
-
 
 
 def _show_users(request):
@@ -28,40 +25,47 @@ def _show_users(request):
         s["show_users"] = True
     return s["show_users"]
 
+
 def settings(request):
     """Settings screen."""
     s = request.session
     _show_users(request)
     if request.method == "POST":
         s["show_users"] = (True if "show_users" in request.POST else False)
-    return render_to_response("cal/settings.html", add_csrf(request, show_users=s["show_users"]))
+    return render_to_response("cal/settings.html",
+                              add_csrf(request, show_users=s["show_users"]))
+
 
 def reminders(request):
     """Return the list of reminders for today and tomorrow."""
     year, month, day = time.localtime()[:3]
     reminders = Entry.objects.filter(date__year=year, date__month=month,
-                                   date__day=day, creator=request.user, remind=True)
+                                     date__day=day, creator=request.user,
+                                     remind=True)
     tomorrow = datetime.now() + timedelta(days=1)
     year, month, day = tomorrow.timetuple()[:3]
-    return list(reminders) + list(Entry.objects.filter(date__year=year, date__month=month,
-                                   date__day=day, creator=request.user, remind=True))
+    return list(reminders) + list(Entry.objects.filter(date__year=year,
+                                  date__month=month,
+                                  date__day=day, creator=request.user,
+                                  remind=True))
 
 
 @login_required
 def main(request, year=None):
     """Main listing, years and months; three years per page."""
     # prev / next years
-    if year: year = int(year)
-    else:    year = time.localtime()[0]
+    if year:
+        year = int(year)
+    else:
+        year = time.localtime()[0]
 
     nowy, nowm = time.localtime()[:2]
     lst = []
 
-    # create a list of months for each year, indicating ones that contain entries and current
     for y in [year, year+1, year+2]:
         mlst = []
         for n, month in enumerate(mnames):
-            entry = current = False   # are there entry(s) for this month; current month?
+            entry = current = False
             entries = Entry.objects.filter(date__year=y, date__month=n+1)
             if not _show_users(request):
                 entries = entries.filter(creator=request.user)
@@ -73,12 +77,14 @@ def main(request, year=None):
             mlst.append(dict(n=n+1, name=month, entry=entry, current=current))
         lst.append((y, mlst))
 
-    return render_to_response("cal/main.html", dict(years=lst, user=request.user, year=year,
-                                                   reminders=reminders(request)))
+    return render_to_response("cal/main.html",
+                              dict(years=lst, user=request.user, year=year,
+                                   reminders=reminders(request)))
 
 
 @login_required
-def month(request, year=datetime.now().year, month=datetime.now().month, change=None):
+def month(request, year=datetime.now().year,
+          month=datetime.now().month, change=None):
     """Listing of days in `month`."""
     year, month = int(year), int(month)
 
@@ -100,9 +106,10 @@ def month(request, year=datetime.now().year, month=datetime.now().month, change=
     week = 0
 
     for day in month_days:
-        entries = current = False   # are there entries for this day; current day?
+        entries = current = False
         if day:
-            entries = Entry.objects.filter(date__year=year, date__month=month, date__day=day)
+            entries = Entry.objects.filter(date__year=year,
+                                           date__month=month, date__day=day)
             if not _show_users(request):
                 entries = entries.filter(creator=request.user)
             if day == nday and year == nyear and month == nmonth:
@@ -113,18 +120,24 @@ def month(request, year=datetime.now().year, month=datetime.now().month, change=
             lst.append([])
             week += 1
 
-    return render_to_response("cal/month.html", dict(year=year, month=month, user=request.user, month_days=lst, mname=mnames[month-1], reminders=reminders(request)))
+    return render_to_response("cal/month.html",
+                              dict(year=year, month=month, user=request.user,
+                                   month_days=lst, mname=mnames[month-1],
+                                   reminders=reminders(request)))
 
 
 @login_required
 def day(request, year, month, day):
     """Entries for the day."""
-    EntriesFormset = modelformset_factory(Entry, extra=1, exclude=("creator", "date"),
+    EntriesFormset = modelformset_factory(Entry,
+                                          extra=1,
+                                          exclude=("creator", "date"),
                                           can_delete=True)
     other_entries = []
     if _show_users(request):
-        other_entries = Entry.objects.filter(date__year=year, date__month=month,
-                                       date__day=day).exclude(creator=request.user)
+        other_entries = Entry.objects.filter(date__year=year,
+                                             date__month=month,
+                                             date__day=day).exclude(creator=request.user)
 
     if request.method == 'POST':
         formset = EntriesFormset(request.POST)
@@ -134,38 +147,19 @@ def day(request, year, month, day):
                 entry.creator = request.user
                 entry.date = date(int(year), int(month), int(day))
                 entry.save()
-            return HttpResponseRedirect(reverse("cal.views.month", args=(year, month)))
+            return HttpResponseRedirect(reverse("cal.views.month",
+                                                args=(year, month)))
 
     else:
         formset = EntriesFormset(queryset=Entry.objects.filter(date__year=year,
-            date__month=month, date__day=day, creator=request.user))
-    return render_to_response("cal/day2.html", add_csrf(request, entries=formset, year=year,
-            month=month, day=day, other_entries=other_entries, reminders=reminders(request)))
+                                 date__month=month, date__day=day,
+                                 creator=request.user))
+    return render_to_response("cal/day2.html",
+                              add_csrf(request, entries=formset,
+                                       year=year, month=month, day=day,
+                                       other_entries=other_entries,
+                                       reminders=reminders(request)))
 
-"""
-from django.views.generic.list import ListView
-from django.utils import timezone
-
-class EntryListView(ListView):
-
-    model = Entry
-    template_name = 'cal/day2.html'
-    context_object_name = 'asjdfhasdf'
-
-    def get_queryset(self):
-        qst = super(EntryListView, self).get_queryset()
-        year = self.kwargs.get('year', None)
-        month = self.kwargs.get('month', None)
-        day = self.kwargs.get('day', None)
-        qst = qst.filter(date__year=year, date__month=month, date__day=day, creator=self.request.user)
-        return qst
-
-
-entry_listview = EntryListView.as_view()
-
-"""
-from django.views.generic.edit import CreateView
-from cal.forms import EntryForm
 
 class EntryCreate(CreateView):
     form_class = EntryForm
@@ -180,9 +174,10 @@ class EntryCreate(CreateView):
         context['year'] = year
         context['month'] = month
         context['day'] = day
-
-
-        context['qst'] = Entry.objects.filter(date__year=year, date__month=month, date__day=day, creator=self.request.user)
+        context['qst'] = Entry.objects.filter(date__year=year,
+                                              date__month=month,
+                                              date__day=day,
+                                              creator=self.request.user)
         return context
 
     def form_valid(self, form):
@@ -200,37 +195,48 @@ class EntryCreate(CreateView):
         day = self.kwargs.get('day', None)
         return reverse_lazy('entry-create', args=(year, month, day))
 
-entry_create = EntryCreate.as_view()
 
-"""
-class DeleteEntryView(DeleteView):
+class EntryUpdateView(UpdateView):
+    form_class = EntryForm
+    template_name = 'cal/update.html'
+    model = Entry
 
-    def get_object(self):
-        return get_object_or_404(Entry, id=1)
+    def get_context_data(self, **kwargs):
+        context = super(EntryUpdateView, self).get_context_data(**kwargs)
+        year = self.kwargs.get('year', None)
+        month = self.kwargs.get('month', None)
+        day = self.kwargs.get('day', None)
+
+        context['year'] = year
+        context['month'] = month
+        context['day'] = day
+
+        context['qst'] = Entry.objects.filter(date__year=year,
+                                              date__month=month,
+                                              date__day=day,
+                                              creator=self.request.user)
+        return context
+
+    def form_valid(self, form):
+        self.instance = form.save(commit=False)
+        self.instance.creator = self.request.user
+        year = self.kwargs.get('year', None)
+        month = self.kwargs.get('month', None)
+        day = self.kwargs.get('day', None)
+        self.instance.date = date(int(year), int(month), int(day))
+        return super(EntryUpdateView, self).form_valid(form)
 
     def get_success_url(self):
-        return reverse("cal.views.month")
-
-    def get(self, *args, **kwargs):
-        return self.delete(*args, **kwargs)
-"""
-
-from django.http import Http404
+        year = self.kwargs.get('year', None)
+        month = self.kwargs.get('month', None)
+        day = self.kwargs.get('day', None)
+        return reverse_lazy('entry-create', args=(year, month, day))
 
 
 class EntryDeleteView(DeleteView):
     model = Entry
     success_url = reverse_lazy('entry-create')
 
-    """def get_object(self, queryset=None):
-         Hook to ensure object is owned by request.user.
-        key = self.kwargs.get('id', None)
-        obj = super(EntryDeleteView, self).get_object()
-        Entry.objects.get(pk=key)
-        if not obj.owner == self.request.user:
-            raise Http404
-        return obj
-"""
     def get_context_data(self, **kwargs):
         context = super(EntryDeleteView, self).get_context_data(**kwargs)
         year = self.kwargs.get('year', None)
@@ -249,9 +255,35 @@ class EntryDeleteView(DeleteView):
         return reverse_lazy('entry-create', args=(year, month, day))
 
 
+class EntryDetailView(DetailView):
+    template_name = 'cal/detail.html'
+    model = Entry
+
+    def get_context_data(self, **kwargs):
+        context = super(EntryDetailView, self).get_context_data(**kwargs)
+        year = self.kwargs.get('year', None)
+        month = self.kwargs.get('month', None)
+        day = self.kwargs.get('day', None)
+        context['year'] = year
+        context['month'] = month
+        context['day'] = day
+
+        return context
+
+    def get_success_url(self):
+        year = self.kwargs.get('year', None)
+        month = self.kwargs.get('month', None)
+        day = self.kwargs.get('day', None)
+        return reverse_lazy('entry-create', args=(year, month, day))
+
 
 def add_csrf(request, **kwargs):
     """Add CSRF and user to dictionary."""
     d = dict(user=request.user, **kwargs)
     d.update(csrf(request))
     return d
+
+entry_create = EntryCreate.as_view()
+entry_update = EntryUpdateView.as_view()
+entry_delete = EntryDeleteView.as_view()
+entry_detail = EntryDetailView.as_view()
