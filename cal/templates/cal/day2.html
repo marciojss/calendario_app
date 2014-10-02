@@ -1,0 +1,43 @@
+<h4>My Entries</h4>
+{% load staticfiles %}
+<head>
+    <link href="{% static 'bootstrap.css' %}" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="{% static 'bootstrap.min.js' %}"></script>
+</head>
+
+<div class="container col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+<table class="table table-bordered">
+    <tr>
+        <td>Id</td>
+        <td>Titulo</td>
+        <td>Snippet</td>
+        <td>Corpo</td>
+        <td>Remind</td>
+    </tr>
+
+    {% for entry in qst %}
+            <tr>
+                <td>{{ entry.id|default_if_none:"" }}</td>
+                <td>{{ entry.title|default_if_none:"" }}</td>
+                <td>{{ entry.snippet|default_if_none:"" }}</td>
+                <td>{{ entry.body|default_if_none:"" }}</td>
+                <td>{{ entry.remind|default_if_none:"" }}</td>
+            </tr>
+
+    {% endfor %}
+</table>
+</div>
+
+<br>
+
+<div class="container col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <h4>Nova entrada</h4>
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-danger" value="">Delete</button>
+        <!--<button type="submit" class="btn btn-danger" value="">Delete</button>-->
+    </form>
+</div>

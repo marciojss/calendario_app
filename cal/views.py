@@ -3,6 +3,7 @@ import calendar
 from datetime import date, datetime, timedelta
 
 from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404, render_to_response
@@ -10,7 +11,8 @@ from django.core.context_processors import csrf
 from django.forms.models import modelformset_factory
 from django.template import RequestContext
 
-from cal.models import *
+from cal.models import Entry
+
 
 mnames = "January February March April May June July August September October November December"
 mnames = mnames.split()
@@ -142,6 +144,59 @@ def day(request, year, month, day):
     return render_to_response("cal/day.html", add_csrf(request, entries=formset, year=year,
             month=month, day=day, other_entries=other_entries, reminders=reminders(request)))
 
+
+from django.views.generic.list import ListView
+from django.utils import timezone
+
+class EntryListView(ListView):
+
+    model = Entry
+    template_name = 'cal/day2.html'
+    context_object_name = 'asjdfhasdf'
+
+    def get_queryset(self):
+        qst = super(EntryListView, self).get_queryset()
+        year = self.kwargs.get('year', None)
+        month = self.kwargs.get('month', None)
+        day = self.kwargs.get('day', None)
+        qst = qst.filter(date__year=year, date__month=month, date__day=day, creator=self.request.user)
+        return qst
+
+
+entry_listview = EntryListView.as_view()
+
+from django.views.generic.edit import CreateView
+from cal.forms import EntryForm
+
+
+class EntryCreate(CreateView):
+    form_class = EntryForm
+    template_name = 'cal/day2.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(EntryCreate, self).get_context_data(**kwargs)
+        year = self.kwargs.get('year', None)
+        month = self.kwargs.get('month', None)
+        day = self.kwargs.get('day', None)
+        context['qst'] = Entry.objects.filter(date__year=year, date__month=month, date__day=day, creator=self.request.user)
+        return context
+
+    def form_valid(self, form):
+        self.instance = form.save(commit=False)
+        self.instance.creator = self.request.user
+        year = self.kwargs.get('year', None)
+        month = self.kwargs.get('month', None)
+        day = self.kwargs.get('day', None)
+        self.instance.date = date(int(year), int(month), int(day))
+        return super(EntryCreate, self).form_valid(form)
+
+    def get_success_url(self):
+        year = self.kwargs.get('year', None)
+        month = self.kwargs.get('month', None)
+        day = self.kwargs.get('day', None)
+        return reverse_lazy('entry-create', args=(year, month, day))
+
+entry_create = EntryCreate.as_view()
 
 def add_csrf(request, **kwargs):
     """Add CSRF and user to dictionary."""

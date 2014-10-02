@@ -3,25 +3,50 @@
 <head>
     <link href="{% static 'bootstrap.css' %}" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
+    <script src="{% static 'bootstrap.min.js' %}"></script>
 </head>
 <form action="{% url 'cal.views.day' year month day %}" method="POST"> {% csrf_token %}
 
 {{ entries.management_form }}
+<div class="container col-lg-12 col-md-12 col-sm-12 col-xs-12">
+<table class="table table-bordered">
+    <tr>
+        <td>Id</td>
+        <td>Titulo</td>
+        <td>Snippet</td>
+        <td>Corpo</td>
+        <td>Remind</td>
+    </tr>
 
+    {% for entry in entries.forms %}
+            <tr>
+                <td>{{ entry.id.value|default_if_none:"" }}</td>
+                <td>{{ entry.title.value|default_if_none:"" }}</td>
+                <td>{{ entry.snippet.value|default_if_none:"" }}</td>
+                <td>{{ entry.body.value|default_if_none:"" }}</td>
+                <td>{{ entry.remind.value|default_if_none:"" }}</td>
+            </tr>
+
+    {% endfor %}
+</table>
+</div>
+<br>
+
+<h4>Nova entrada</h4>
+<div class="container col-lg-12 col-md-12 col-sm-12 col-xs-12">
 {% for entry in entries.forms %}
     {{ entry.id }}
-    <div class="entry">
-        <div id="inp1">
-            <p>Title: {{ entry.title }}</p>
-            <p>Snippet: {{ entry.snippet }}</p>
+    {% if not entry.id.value %}
+        <div class="entry">
+            <div id="inp1">
+                <p>Title: {{ entry.title }}</p>
+                <p>Snippet: {{ entry.snippet }}</p>
+            </div>
+            <p>Remind: {{ entry.remind }}</p>
+            {{ entry.body }}
         </div>
-        <p>Remind: {{ entry.remind }}</p>
-        {{ entry.body }}
-    </div>
-        <button class="btn btn-danger" value="{{ entry.DELETE }}">Delete</button>
+            <button class="btn btn-danger" value="{{ entry.DELETE }}">Delete</button>
+    {% endif %}
 {% endfor %}
-
-<input class="btn btn-default" type="submit" value="Save" />
-<a href="{% url 'cal.views.month' year month %}">Back</a>
+</div>
  </form>
