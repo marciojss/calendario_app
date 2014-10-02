@@ -1,0 +1,11 @@
+{% load staticfiles %}
+<head>
+    <link href="{% static 'bootstrap.css' %}" rel="stylesheet">
+</head>
+
+<h4>Confirm delete?</h4>
+<form method="post">
+    {% csrf_token %}
+    <input class="btn btn-danger" type="submit" value="Sim"/>
+	<a href="{% url 'entry-create' year month day%}" class="btn btn-default">Não</a>
+</form>

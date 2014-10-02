@@ -1,0 +1,16 @@
+<h4>My Entries</h4>
+{% load staticfiles %}
+<head>
+    <link href="{% static 'bootstrap.css' %}" rel="stylesheet">
+</head>
+
+
+<div class="container col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <h4>Atualizar Entrada</h4>
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-default" value="Update">Salvar</button>
+        <a href="{% url 'entry-create' year month day%}" class="btn btn-default">Voltar</a>
+    </form>
+</div>

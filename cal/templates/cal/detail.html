@@ -1,0 +1,29 @@
+{% load staticfiles %}
+<head>
+    <link href="{% static 'bootstrap.css' %}" rel="stylesheet">
+</head>
+
+<h3>{{ object.title }}</h3>
+
+<div class="container col-lg-12 col-md-12 col-sm-12 col-xs-12">
+<table class="table table-bordered table-striped">
+    <tr>
+        <td>ID: {{ object.id }}</td>
+    </tr>
+    <tr>
+        <td>Título: {{ object.title }}</td>
+    </tr>
+    <tr>
+        <td>Snippet: {{ object.snippet|default_if_none:"" }}</td>
+    </tr>
+    <tr>
+        <td>Corpo: {{ object.body|default_if_none:"" }}</td>
+    </tr>
+    <tr>
+        <td>Remind?: {{ object.remind|default_if_none:"" }}</td>
+    </tr>
+</table>
+</div>
+<div>
+        <a href="{% url 'entry-create' year month day%}" class="btn btn-default">Voltar</a>
+</div>
