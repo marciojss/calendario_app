@@ -45,8 +45,11 @@
             <p>Remind: {{ entry.remind }}</p>
             {{ entry.body }}
         </div>
-            <button class="btn btn-danger" value="{{ entry.DELETE }}">Delete</button>
     {% endif %}
+        <p>Remind: {{ entry.remind }}</p>
+        {{ entry.body }}
+    </div>
+        <a href="{% url 'delete_entry' %}" class="btn btn-danger" id="Delete">{{ entry.DELETE.label }}</a>
 {% endfor %}
 </div>
  </form>
