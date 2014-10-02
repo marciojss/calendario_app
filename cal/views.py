@@ -94,14 +94,11 @@ def month(request, year=datetime.now().year, month=datetime.now().month, change=
 
     # init variables
     cal = calendar.Calendar()
-    # import ipdb; ipdb.set_trace()
     month_days = cal.itermonthdays(year, month)
     nyear, nmonth, nday = time.localtime()[:3]
     lst = [[]]
     week = 0
 
-    # make month lists containing list of days for each week
-    # each day tuple will contain list of entries and 'current' indicator
     for day in month_days:
         entries = current = False   # are there entries for this day; current day?
         if day:
@@ -132,7 +129,6 @@ def day(request, year, month, day):
     if request.method == 'POST':
         formset = EntriesFormset(request.POST)
         if formset.is_valid():
-            # add current user and date to each entry & save
             entries = formset.save(commit=False)
             for entry in entries:
                 entry.creator = request.user
@@ -141,10 +137,9 @@ def day(request, year, month, day):
             return HttpResponseRedirect(reverse("cal.views.month", args=(year, month)))
 
     else:
-        # display formset for existing enties and one extra form
         formset = EntriesFormset(queryset=Entry.objects.filter(date__year=year,
             date__month=month, date__day=day, creator=request.user))
-    return render_to_response("cal/day.html", add_csrf(request, entries=formset, year=year,
+    return render_to_response("cal/day2.html", add_csrf(request, entries=formset, year=year,
             month=month, day=day, other_entries=other_entries, reminders=reminders(request)))
 
 """
@@ -181,6 +176,12 @@ class EntryCreate(CreateView):
         year = self.kwargs.get('year', None)
         month = self.kwargs.get('month', None)
         day = self.kwargs.get('day', None)
+
+        context['year'] = year
+        context['month'] = month
+        context['day'] = day
+
+
         context['qst'] = Entry.objects.filter(date__year=year, date__month=month, date__day=day, creator=self.request.user)
         return context
 
@@ -201,7 +202,7 @@ class EntryCreate(CreateView):
 
 entry_create = EntryCreate.as_view()
 
-
+"""
 class DeleteEntryView(DeleteView):
 
     def get_object(self):
@@ -212,6 +213,41 @@ class DeleteEntryView(DeleteView):
 
     def get(self, *args, **kwargs):
         return self.delete(*args, **kwargs)
+"""
+
+from django.http import Http404
+
+
+class EntryDeleteView(DeleteView):
+    model = Entry
+    success_url = reverse_lazy('entry-create')
+
+    """def get_object(self, queryset=None):
+         Hook to ensure object is owned by request.user.
+        key = self.kwargs.get('id', None)
+        obj = super(EntryDeleteView, self).get_object()
+        Entry.objects.get(pk=key)
+        if not obj.owner == self.request.user:
+            raise Http404
+        return obj
+"""
+    def get_context_data(self, **kwargs):
+        context = super(EntryDeleteView, self).get_context_data(**kwargs)
+        year = self.kwargs.get('year', None)
+        month = self.kwargs.get('month', None)
+        day = self.kwargs.get('day', None)
+        context['year'] = year
+        context['month'] = month
+        context['day'] = day
+
+        return context
+
+    def get_success_url(self):
+        year = self.kwargs.get('year', None)
+        month = self.kwargs.get('month', None)
+        day = self.kwargs.get('day', None)
+        return reverse_lazy('entry-create', args=(year, month, day))
+
 
 
 def add_csrf(request, **kwargs):

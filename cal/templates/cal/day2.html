@@ -24,8 +24,12 @@
                 <td>{{ entry.snippet|default_if_none:"" }}</td>
                 <td>{{ entry.body|default_if_none:"" }}</td>
                 <td>{{ entry.remind|default_if_none:"" }}</td>
+                <td>
+                    <a href="{% url 'entry-delete' pk=entry.id year=year month=month day=day %}" class="btn btn-danger">Deletar</a>  
+                </td>
+            
             </tr>
-
+            
     {% endfor %}
 </table>
 </div>
@@ -37,7 +41,7 @@
     <form action="" method="POST">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit" class="btn btn-danger" value="">Delete</button>
+        <button type="submit" class="btn btn-danger" value="">Salvar</button>
         <!--<button type="submit" class="btn btn-danger" value="">Delete</button>-->
     </form>
 </div>
