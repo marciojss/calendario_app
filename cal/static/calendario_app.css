@@ -1,0 +1,22 @@
+
+#content
+	{
+		height:80px; 
+		width:120px;
+		overflow:auto;
+	}
+
+#content:hover 
+	{
+		background-color: #bdbdbd;
+	}
+
+#head
+{
+	background-color: #1c1c1c;
+	color: gray;
+	overflow: auto;
+	table-layout:fixed;
+	word-wrap: break-word;
+}
+
