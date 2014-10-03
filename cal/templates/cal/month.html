@@ -17,19 +17,18 @@
 
 <h4>{{ mname }} {{ year }}</h4>
 <div class="container col-lg-12 col-md-12 col-sm-12 col-xs-12">
-<div class="month col-lg-7 col-md-7 col-sm-7 col-xs-7">
-    <table class="table table-bordered table-striped">
+    <div class="month col-lg-7 col-md-7 col-sm-7 col-xs-7">
+        <table class="table table-bordered table-striped">
 
-
-    <tr>
-        <td class="empty col-lg-1 col-md-1 col-sm-1 col-xs-1">Mon</td>
-        <td class="empty col-lg-1 col-md-1 col-sm-1 col-xs-1">Tue</td>
-        <td class="empty col-lg-1 col-md-1 col-sm-1 col-xs-1">Wed</td>
-        <td class="empty col-lg-1 col-md-1 col-sm-1 col-xs-1">Thu</td>
-        <td class="empty col-lg-1 col-md-1 col-sm-1 col-xs-1">Fri</td>
-        <td class="empty col-lg-1 col-md-1 col-sm-1 col-xs-1">Sat</td>
-        <td class="empty col-lg-1 col-md-1 col-sm-1 col-xs-1">Sun</td>
-    </tr>
+            <tr>
+                <td class="empty col-lg-2 col-md-1 col-sm-1 col-xs-1" id="head">Seg</td>
+                <td class="empty col-lg-2 col-md-1 col-sm-1 col-xs-1" id="head">Ter</td>
+                <td class="empty col-lg-2 col-md-1 col-sm-1 col-xs-1" id="head">Qua</td>
+                <td class="empty col-lg-2 col-md-1 col-sm-1 col-xs-1" id="head">Qui</td>
+                <td class="empty col-lg-2 col-md-1 col-sm-1 col-xs-1" id="head">Sex</td>
+                <td class="empty col-lg-2 col-md-1 col-sm-1 col-xs-1" id="head">Sáb</td>
+                <td class="empty col-lg-2 col-md-1 col-sm-1 col-xs-1" id="head">Dom</td>
+            </tr>
 
     {% for week in month_days %}
         <tr>
@@ -59,10 +58,11 @@
             </td>
         {% endfor %}
         </tr>
-    {% endfor %}
-    </table>
+        {% endfor %}
+        </table>
 
-    <div class="clear"></div>
+        <div class="clear"></div>
+    </div>
 </div>
-</div>
+
 <a class="btn btn-primary" href="{% url 'cal.views.main' year %}">Visualizar Anos</a>
