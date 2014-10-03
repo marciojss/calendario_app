@@ -148,7 +148,7 @@ class EntryCreate(CreateView):
         year = self.kwargs.get('year', None)
         month = self.kwargs.get('month', None)
         day = self.kwargs.get('day', None)
-        return reverse_lazy('entry-create', args=(year, month, day))
+        return reverse_lazy('cal:entry-create', args=(year, month, day))
 
 
 class EntryUpdateView(UpdateView):
@@ -185,12 +185,12 @@ class EntryUpdateView(UpdateView):
         year = self.kwargs.get('year', None)
         month = self.kwargs.get('month', None)
         day = self.kwargs.get('day', None)
-        return reverse_lazy('entry-create', args=(year, month, day))
+        return reverse_lazy('cal:entry-create', args=(year, month, day))
 
 
 class EntryDeleteView(DeleteView):
     model = Entry
-    success_url = reverse_lazy('entry-create')
+    success_url = reverse_lazy('cal:entry-create')
 
     def get_context_data(self, **kwargs):
         context = super(EntryDeleteView, self).get_context_data(**kwargs)
@@ -207,7 +207,7 @@ class EntryDeleteView(DeleteView):
         year = self.kwargs.get('year', None)
         month = self.kwargs.get('month', None)
         day = self.kwargs.get('day', None)
-        return reverse_lazy('entry-create', args=(year, month, day))
+        return reverse_lazy('cal:entry-create', args=(year, month, day))
 
 
 class EntryDetailView(DetailView):
@@ -229,7 +229,7 @@ class EntryDetailView(DetailView):
         year = self.kwargs.get('year', None)
         month = self.kwargs.get('month', None)
         day = self.kwargs.get('day', None)
-        return reverse_lazy('entry-create', args=(year, month, day))
+        return reverse_lazy('cal:entry-create', args=(year, month, day))
 
 
 def add_csrf(request, **kwargs):

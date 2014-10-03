@@ -31,11 +31,3 @@ class Entry(models.Model):
     class Meta:
         verbose_name_plural = "entries"
 
-
-### Admin
-
-class EntryAdmin(admin.ModelAdmin):
-    list_display = ["creator", "date", "title", "snippet"]
-    list_filter = ["creator"]
-
-admin.site.register(Entry, EntryAdmin)

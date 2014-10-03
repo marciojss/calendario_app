@@ -4,55 +4,50 @@
     <link href="{% static 'calendario_app.css' %}" rel="stylesheet">
 </head>
 
-<div class="container col-lg-12 col-md-12 col-sm-12 col-xs-12">
-<h1>Entradas</h1>
-    <div class="table-responsive">
-        <table class="table table-hover table-striped">
-            <tr>
-                <td class="col-lg-1 col-md-1 col-sm-1 col-xs-1" id="ID">Id</td>
-                <td class="col-lg-1 col-md-1 col-sm-1 col-xs-1" id="head">Titulo</td>
-                <td class="col-lg-1 col-md-1 col-sm-1 col-xs-1" id="head">Dica</td>
-                <td class="col-lg-2 col-md-2 col-sm-2 col-xs-2" id="head">Corpo</td>
-                <td class="col-lg-1 col-md-1 col-sm-1 col-xs-1" id="head">Lembrete</td>
-                <td class="col-lg-1 col-md-1 col-sm-1 col-xs-1" id="head">Deletar</td>
-                <td class="col-lg-1 col-md-1 col-sm-1 col-xs-1" id="head">Atualizar</td>
-                <td class="col-lg-1 col-md-1 col-sm-1 col-xs-1" id="head">Detalhes</td>
-            </tr>
-            {% for entry in qst %}
-                    <tr>
-                        <td>{{ entry.id|default_if_none:"" }}</td>
-                        <td>{{ entry.title|default_if_none:"" }}</td>
-                        <td>{{ entry.snippet|default_if_none:"" }}</td>
-                        <td>{{ entry.body|default_if_none:"" }}</td>
-                        <td>{{ entry.remind|yesno:"Sim,Não" }}</td>
-                        <td>
-                            <a href="{% url 'entry-delete' pk=entry.id year=year month=month day=day %}" class="btn btn-danger">Deletar</a>  
-                        </td>
-                        <td>
-                            <a href="{% url 'entry-update' pk=entry.id year=year month=month day=day %}" class="btn btn-warning">Atualizar</a>  
-                        </td>  
-                        <td>
-                            <a href="{% url 'entry-detail' pk=entry.id year=year month=month day=day %}" class="btn btn-primary">Detalhes</a>  
-                        </td>
-                    
-                    </tr>
-                    
-            {% endfor %}
-        </table>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <h1>Entradas</h1>
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped">
+                        <tr>
+                            <td class="head">Id</td>
+                            <td class="head">Titulo</td>
+                            <td class="head">Dica</td>
+                            <td class="head">Corpo</td>
+                            <td class="head">Lembrete</td>
+                            <td class="head">Deletar</td>
+                            <td class="head">Atualizar</td>
+                            <td class="head">Detalhes</td>
+                        </tr>
+                        {% for entry in qst %}
+                        <tr>
+                            <td>{{ entry.id|default_if_none:"" }}</td>
+                            <td>{{ entry.title|default_if_none:"" }}</td>
+                            <td>{{ entry.snippet|default_if_none:"" }}</td>
+                            <td>{{ entry.body|default_if_none:"" }}</td>
+                            <td>{{ entry.remind|yesno:"Sim,Não" }}</td>
+                            <td><a href="{% url 'cal:entry-delete' pk=entry.id year=year month=month day=day %}" class="btn btn-danger">Deletar</a></td>
+                            <td><a href="{% url 'cal:entry-update' pk=entry.id year=year month=month day=day %}" class="btn btn-warning">Atualizar</a></td>  
+                            <td><a href="{% url 'cal:entry-detail' pk=entry.id year=year month=month day=day %}" class="btn btn-primary">Detalhes</a></td>
+                        
+                        </tr>
+                        
+                        {% endfor %}
+                    </table>
+                </div>
+                <h4>Nova entrada</h4>
+                <form role="form" action="" method="POST">
+                    {% csrf_token %}
+
+                    {{ form.as_p }}
+
+                    <button type="submit" class="btn btn-default" value="">Salvar</button>
+                    <a class="btn btn-primary" href="{% url 'cal:month' year month %}">Visualizar Mês</a>
+                </form>
+            </div>
+        </div>
     </div>
-</div>
-
-<br>
-
-<div class="container col-lg-12 col-md-12 col-sm-12 col-xs-12">
-    <h4>Nova entrada</h4>
-    <form role="form" action="" method="POST">
-        {% csrf_token %}
-
-        {{ form.as_p }}
-
-        <button type="submit" class="btn btn-default" value="">Salvar</button>
-        <!--<button type="submit" class="btn btn-danger" value="">Delete</button>-->
-    </form>
-    <a class="btn btn-primary" href="{% url 'cal.views.month' year month %}">Visualizar Mês</a>
-</div>
+    <br>
+</body>

@@ -1,5 +1,8 @@
+body {
+	margin-top: 50px;
+}
 
-#content
+.content
 	{
 		height:80px; 
 		width:120px;
@@ -11,28 +14,13 @@
 		background-color: #bdbdbd;
 	}
 
-#head
+.head
 {
 	background-color: #1c1c1c;
-	color: gray;
+	color: white;
 	overflow: auto;
-	table-layout:fixed;
-	word-wrap: break-word;
-}
-
-#ID
-{
-	background-color: #1c1c1c;
-	color: gray;
-	overflow: hidden;
-	width:70px;
-}
-
-#entry-update
-{
-	background-color: #1c1c1c;
-	color: gray;
-	text-align:left;
+	font-weight: bold;
+	padding:5px;
 }
 
 h1

@@ -4,65 +4,72 @@
     <link href="{% static 'bootstrap.css' %}" rel="stylesheet">
     <link href="{% static 'calendario_app.css' %}" rel="stylesheet">
 </head>
-<div class="container col-lg-12 col-md-12 col-sm-12 col-xs-12">
-<a class="btn btn-default" href= "{% url 'cal.views.month' year=year month=month change="prev" %}">&lt;&lt; Anterior</a>
-<a class="btn btn-default" href= "{% url 'cal.views.month' year=year month=month change="next" %}">Próximo &gt;&gt;</a>
+<body>
+        
+    <div class="container">
+        <div class="row">
+            
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                
+                <a class="btn btn-default" href= "{% url 'cal:cal.views.month' year=year month=month change="prev" %}">&lt;&lt; Anterior</a>
+                <a class="btn btn-default" href= "{% url 'cal:cal.views.month' year=year month=month change="next" %}">Próximo &gt;&gt;</a>
 
-{% if reminders %}
-<div class="reminders">
-    <div class="gr">Alertas</div>
-    {% for reminder in reminders %}<p> {{ reminder.short|safe }}</p>
-    {% endfor %}
-</div>
-{% endif %}
-<br>
-    <div class="month col-lg-7 col-md-7 col-sm-7 col-xs-7">
-        <h3>{{ mname }} {{ year }}</h3>
-        <table class="table table-striped">
-
-            <tr>
-                <td class="empty col-lg-2 col-md-1 col-sm-1 col-xs-1" id="head">Seg</td>
-                <td class="empty col-lg-2 col-md-1 col-sm-1 col-xs-1" id="head">Ter</td>
-                <td class="empty col-lg-2 col-md-1 col-sm-1 col-xs-1" id="head">Qua</td>
-                <td class="empty col-lg-2 col-md-1 col-sm-1 col-xs-1" id="head">Qui</td>
-                <td class="empty col-lg-2 col-md-1 col-sm-1 col-xs-1" id="head">Sex</td>
-                <td class="empty col-lg-2 col-md-1 col-sm-1 col-xs-1" id="head">Sáb</td>
-                <td class="empty col-lg-2 col-md-1 col-sm-1 col-xs-1" id="head">Dom</td>
-            </tr>
-
-    {% for week in month_days %}
-        <tr>
-        {% for day, entries, current in week %}
-
-            <!-- TD style: empty | day | current; onClick handler and highlight  -->
-            <td class="hover" {% if day != 0 %}
-                onClick="parent.location='{% url 'entry-create' year month day %}'"
-                id="content"
-            {% endif %} >
-                {% if day != 0 %}
-                <div id="content" style="">
-                    {{ day }}
-                    {% for entry in entries %}
-                        <br />
-                        <b>{{ entry.creator }}</b>: {{ entry.short|safe }}
+                {% if reminders %}
+                <div class="reminders">
+                    <div class="gr">Alertas</div>
+                    {% for reminder in reminders %}
+                        <p> {{ reminder.short|safe }}</p>
                     {% endfor %}
-                    {% for entry in other_entries %}
-                        <div class="entry">
-                        {{ entry.creator }} |
-                        {{ entry.short|safe }}<br />
-                        {{ entry.body }}<br />
-                    {% endfor %} <br />
-                    </div>
+                </div>
                 {% endif %}
-            </div>
-            </td>
-        {% endfor %}
-        </tr>
-        {% endfor %}
-        </table>
 
-        <div class="clear"></div>
-        <a class="btn btn-primary" href="{% url 'cal.views.main' year %}">Visualizar Anos</a>
+                <br>
+                <div class="month">
+                    <h3>{{ mname }} {{ year }}</h3>                            
+                    <table class="table table-striped">
+                        <tr>
+                            <td class="head">Seg</td>
+                            <td class="head">Ter</td>
+                            <td class="head">Qua</td>
+                            <td class="head">Qui</td>
+                            <td class="head">Sex</td>
+                            <td class="head">Sáb</td>
+                            <td class="head">Dom</td>
+                        </tr>
+
+                        {% for week in month_days %}
+                        <tr>
+                            {% for day, entries, current in week %}
+                                <td class="hover" {% if day != 0 %}
+                                    onClick="parent.location='{% url 'cal:entry-create' year month day %}'"
+                                    id="content"
+                                {% endif %} >
+                                    {% if day != 0 %}
+                                    <div class="content">
+                                        {{ day }}
+                                        {% for entry in entries %}
+                                            <br />
+                                            <b>{{ entry.creator }}</b>: {{ entry.short|safe }}
+                                        {% endfor %}
+                                            {% for entry in other_entries %}
+                                            <div class="entry">
+                                            {{ entry.creator }} |
+                                            {{ entry.short|safe }}<br />
+                                            {{ entry.body }}<br />
+                                            {% endfor %} <br />
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </table>
+                    <div class="clear"></div>
+                    <a class="btn btn-primary" href="{% url 'cal:main' year %}">Visualizar Anos</a>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+</body>
 

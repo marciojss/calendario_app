@@ -1,30 +1,35 @@
 <!DOCTYPE html>
-<html>
     {% load staticfiles %}
     <head>
         <link href="{% static 'bootstrap.css' %}" rel="stylesheet">
+        <link href="{% static 'calendario_app.css' %}" rel="stylesheet">
     </head>
-    <div class="container col-lg-12 col-md-12 col-sm-12 col-xs-12">
-    <a class="btn btn-default" href="{% url 'cal.views.main' year|add:'-3' %}">&lt;&lt; Anteriores</a>
-    <a class="btn btn-default" href="{% url 'cal.views.main' year|add:'3' %}">Próximos &gt;&gt;</a>
-        {% for year, months in years %}
-            <div class="clear"></div>
-            <h4>{{ year }}</h4>
-                <table class="table table-bordered">
-                    <tr>
-                    {% for month in months %}
-                        <!--{% if month.n == 0 %}{% endif %}-->
-                            <td>
-                                {% if month.entry %}<b>{% endif %}
-                                    <a href="{% url 'cal.views.month' year=year month=month.n %}">{{ month.name }}</a>
-                                {% if month.entry %}</b>{% endif %}
-                            </td>
-                        </div>
-
-                        {% if month.n == 6 %}</tr><tr>{% endif %}
-                    {% endfor %}
-                    </tr>
-            </table>
-        {% endfor %}
+    
+<body>
+    <div class="container">
+        <div class="row">
+            <a class="btn btn-default" href="{% url 'cal:main' year|add:'-3' %}">&lt;&lt; Anteriores</a>
+            <a class="btn btn-default" href="{% url 'cal:main' year|add:'3' %}">Próximos &gt;&gt;</a>
+            {% for year, months in years %}
+                <div class="clear"></div>
+                <h4>{{ year }}</h4>
+                    <table class="table table-bordered">
+                        <tr>
+                        {% for month in months %}
+                                <td>
+                                    {% if month.entry %}
+                                    <b>
+                                    {% endif %}
+                                        <a href="{% url 'cal:month' year=year month=month.n %}">{{ month.name }}</a>
+                                    {% if month.entry %}
+                                    </b>
+                                    {% endif %}
+                                </td>
+                            {% if month.n == 6 %}</tr><tr>{% endif %}
+                        {% endfor %}
+                        </tr>
+                </table>
+            {% endfor %}
+        </div>    
     </div>
-</html>
+</body>
