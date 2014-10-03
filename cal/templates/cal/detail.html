@@ -23,7 +23,11 @@
         <td>Remind?: {{ object.remind|default_if_none:"" }}</td>
     </tr>
 </table>
+
 </div>
+
 <div>
         <a href="{% url 'entry-create' year month day%}" class="btn btn-default">Voltar</a>
+        <a href="{% url 'entry-update' pk=entry.id year=year month=month day=day %}" class="btn btn-warning">Atualizar</a>
+        <a href="{% url 'entry-delete' pk=entry.id year=year month=month day=day %}" class="btn btn-danger">Deletar</a>
 </div>
