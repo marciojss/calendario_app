@@ -2,13 +2,14 @@
 {% load staticfiles %}
 <head>
     <link href="{% static 'bootstrap.css' %}" rel="stylesheet">
+    <link href="{% static 'calendario_app.css' %}" rel="stylesheet">
 </head>
 <a href= "{% url 'cal.views.month' year=year month=month change="prev" %}">&lt;&lt; Prev</a>
 <a href= "{% url 'cal.views.month' year=year month=month change="next" %}">Next &gt;&gt;</a>
 
 {% if reminders %}
 <div class="reminders">
-    <div class="gr">Alerts</div>
+    <div class="gr">Alertas</div>
     {% for reminder in reminders %}<p> {{ reminder.short|safe }}</p>
     {% endfor %}
 </div>
@@ -17,7 +18,7 @@
 <h4>{{ mname }} {{ year }}</h4>
 <div class="container col-lg-12 col-md-12 col-sm-12 col-xs-12">
 <div class="month col-lg-7 col-md-7 col-sm-7 col-xs-7">
-    <table class="table table-bordered">
+    <table class="table table-bordered table-striped">
 
 
     <tr>
@@ -31,34 +32,30 @@
     </tr>
 
     {% for week in month_days %}
-        <tr class="">
+        <tr>
         {% for day, entries, current in week %}
 
             <!-- TD style: empty | day | current; onClick handler and highlight  -->
-            <td class= {% if day == 0 %}"empty"{% endif %}
-            {% if day != 0 and not current %}"day"{% endif %}
-            {% if day != 0 and current %}"current"{% endif %}
-            {% if day != 0 %}
+            <td class="hover" {% if day != 0 %}
                 onClick="parent.location='{% url 'entry-create' year month day %}'"
-                onMouseOver="this.bgColor='#eeeeee';"
-                onMouseOut="this.bgColor='white';"
+                id="content"
             {% endif %} >
-
-            <!-- Day number and entry snippets -->
-            {% if day != 0 %}
-                {{ day }}
-                {% for entry in entries %}
-                    <br />
-                    <b>{{ entry.creator }}</b>: {{ entry.short|safe }}
-                {% endfor %}
-                {% for entry in other_entries %}
-                    <div class="entry">
-                    {{ entry.creator }} |
-                    {{ entry.short|safe }}<br />
-                    {{ entry.body }}<br />
+                {% if day != 0 %}
+                <div id="content" style="">
+                    {{ day }}
+                    {% for entry in entries %}
+                        <br />
+                        <b>{{ entry.creator }}</b>: {{ entry.short|safe }}
+                    {% endfor %}
+                    {% for entry in other_entries %}
+                        <div class="entry">
+                        {{ entry.creator }} |
+                        {{ entry.short|safe }}<br />
+                        {{ entry.body }}<br />
+                    {% endfor %} <br />
                     </div>
-                {% endfor %} <br />
-            {% endif %}
+                {% endif %}
+            </div>
             </td>
         {% endfor %}
         </tr>

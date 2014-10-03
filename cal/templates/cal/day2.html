@@ -10,9 +10,9 @@
     <tr>
         <td>Id</td>
         <td>Titulo</td>
-        <td>Snippet</td>
+        <td>Dica</td>
         <td>Corpo</td>
-        <td>Remind</td>
+        <td>Lembrete</td>
         <td>Deletar</td>
         <td>Atualizar</td>
         <td>Detalhes</td>
@@ -24,7 +24,7 @@
                 <td>{{ entry.title|default_if_none:"" }}</td>
                 <td>{{ entry.snippet|default_if_none:"" }}</td>
                 <td>{{ entry.body|default_if_none:"" }}</td>
-                <td>{{ entry.remind|default_if_none:"" }}</td>
+                <td>{{ entry.remind|yesno:"Sim,Não" }}</td>
                 <td>
                     <a href="{% url 'entry-delete' pk=entry.id year=year month=month day=day %}" class="btn btn-danger">Deletar</a>  
                 </td>

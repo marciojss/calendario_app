@@ -26,16 +26,6 @@ def _show_users(request):
     return s["show_users"]
 
 
-def settings(request):
-    """Settings screen."""
-    s = request.session
-    _show_users(request)
-    if request.method == "POST":
-        s["show_users"] = (True if "show_users" in request.POST else False)
-    return render_to_response("cal/settings.html",
-                              add_csrf(request, show_users=s["show_users"]))
-
-
 def reminders(request):
     """Return the list of reminders for today and tomorrow."""
     year, month, day = time.localtime()[:3]
@@ -124,41 +114,6 @@ def month(request, year=datetime.now().year,
                               dict(year=year, month=month, user=request.user,
                                    month_days=lst, mname=mnames[month-1],
                                    reminders=reminders(request)))
-
-
-@login_required
-def day(request, year, month, day):
-    """Entries for the day."""
-    EntriesFormset = modelformset_factory(Entry,
-                                          extra=1,
-                                          exclude=("creator", "date"),
-                                          can_delete=True)
-    other_entries = []
-    if _show_users(request):
-        other_entries = Entry.objects.filter(date__year=year,
-                                             date__month=month,
-                                             date__day=day).exclude(creator=request.user)
-
-    if request.method == 'POST':
-        formset = EntriesFormset(request.POST)
-        if formset.is_valid():
-            entries = formset.save(commit=False)
-            for entry in entries:
-                entry.creator = request.user
-                entry.date = date(int(year), int(month), int(day))
-                entry.save()
-            return HttpResponseRedirect(reverse("cal.views.month",
-                                                args=(year, month)))
-
-    else:
-        formset = EntriesFormset(queryset=Entry.objects.filter(date__year=year,
-                                 date__month=month, date__day=day,
-                                 creator=request.user))
-    return render_to_response("cal/day2.html",
-                              add_csrf(request, entries=formset,
-                                       year=year, month=month, day=day,
-                                       other_entries=other_entries,
-                                       reminders=reminders(request)))
 
 
 class EntryCreate(CreateView):

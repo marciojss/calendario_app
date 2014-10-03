@@ -3,7 +3,7 @@
     <link href="{% static 'bootstrap.css' %}" rel="stylesheet">
 </head>
 
-<h4>Confirm delete?</h4>
+<h4>Deseja excluir a entrada {{ entry.title }}?</h4>
 <form method="post">
     {% csrf_token %}
     <input class="btn btn-danger" type="submit" value="Sim"/>
