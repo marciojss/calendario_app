@@ -4,8 +4,8 @@
 <head>
     <link href="{% static 'bootstrap.css' %}" rel="stylesheet">
 </head>
-<a href="{% url 'cal.views.main' year|add:'-3' %}">&lt;&lt; Prev</a>
-<a href="{% url 'cal.views.main' year|add:'3' %}">Next &gt;&gt;</a>
+<a class="btn btn-default" href="{% url 'cal.views.main' year|add:'-3' %}">&lt;&lt; Anteriores</a>
+<a class="btn btn-default" href="{% url 'cal.views.main' year|add:'3' %}">Próximos &gt;&gt;</a>
 
     {% for year, months in years %}
         <div class="clear"></div>

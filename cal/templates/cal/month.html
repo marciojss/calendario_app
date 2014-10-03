@@ -4,8 +4,8 @@
     <link href="{% static 'bootstrap.css' %}" rel="stylesheet">
     <link href="{% static 'calendario_app.css' %}" rel="stylesheet">
 </head>
-<a href= "{% url 'cal.views.month' year=year month=month change="prev" %}">&lt;&lt; Prev</a>
-<a href= "{% url 'cal.views.month' year=year month=month change="next" %}">Next &gt;&gt;</a>
+<a class="btn btn-default" href= "{% url 'cal.views.month' year=year month=month change="prev" %}">&lt;&lt; Anterior</a>
+<a class="btn btn-default" href= "{% url 'cal.views.month' year=year month=month change="next" %}">Próximo &gt;&gt;</a>
 
 {% if reminders %}
 <div class="reminders">
