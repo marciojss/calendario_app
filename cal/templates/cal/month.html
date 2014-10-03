@@ -4,6 +4,7 @@
     <link href="{% static 'bootstrap.css' %}" rel="stylesheet">
     <link href="{% static 'calendario_app.css' %}" rel="stylesheet">
 </head>
+<div class="container col-lg-12 col-md-12 col-sm-12 col-xs-12">
 <a class="btn btn-default" href= "{% url 'cal.views.month' year=year month=month change="prev" %}">&lt;&lt; Anterior</a>
 <a class="btn btn-default" href= "{% url 'cal.views.month' year=year month=month change="next" %}">Próximo &gt;&gt;</a>
 
@@ -14,10 +15,9 @@
     {% endfor %}
 </div>
 {% endif %}
-
-<div class="container col-lg-12 col-md-12 col-sm-12 col-xs-12">
+<br>
     <div class="month col-lg-7 col-md-7 col-sm-7 col-xs-7">
-        <h4>{{ mname }} {{ year }}</h4>
+        <h3>{{ mname }} {{ year }}</h3>
         <table class="table table-striped">
 
             <tr>
@@ -62,7 +62,7 @@
         </table>
 
         <div class="clear"></div>
-<a class="btn btn-primary" href="{% url 'cal.views.main' year %}">Visualizar Anos</a>
+        <a class="btn btn-primary" href="{% url 'cal.views.main' year %}">Visualizar Anos</a>
     </div>
 </div>
 

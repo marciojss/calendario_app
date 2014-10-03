@@ -1,12 +1,14 @@
-<h4>Entradas</h4>
 {% load staticfiles %}
 <head>
     <link href="{% static 'bootstrap.css' %}" rel="stylesheet">
+    <link href="{% static 'calendario_app.css' %}" rel="stylesheet">
 </head>
-
-
 <div class="container col-lg-12 col-md-12 col-sm-12 col-xs-12">
-    <h4>Atualizar Entrada</h4>
+	<h1>Entradas</h1>
+	<div class="container" id="entry-update">
+    	<h4>Atualizar Entrada</h4>
+    </div>
+    <br>
     <form action="" method="POST">
         {% csrf_token %}
         {{ form.as_p }}

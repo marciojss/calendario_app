@@ -1,10 +1,14 @@
 {% load staticfiles %}
 <head>
     <link href="{% static 'bootstrap.css' %}" rel="stylesheet">
+    <link href="{% static 'calendario_app.css' %}" rel="stylesheet">
 </head>
-<h4>Deseja excluir a entrada {{ entry.title }}?</h4>
-<form method="post">
-    {% csrf_token %}
-    <input class="btn btn-danger" type="submit" value="Sim"/>
-	<a href="{% url 'entry-create' year month day%}" class="btn btn-default">Não</a>
-</form>
+	<div class="container col-lg-12 col-md-12 col-sm-12 col-xs-12">
+		<h1>Entradas</h1>
+		<h4>Deseja mesmo excluir a entrada {{ entry.title }}?</h4>
+		<form method="post">
+		    {% csrf_token %}
+		    <input class="btn btn-danger" type="submit" value="Sim"/>
+			<a href="{% url 'entry-create' year month day%}" class="btn btn-default">Não</a>
+		</form>
+	</div>
