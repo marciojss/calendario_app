@@ -25,9 +25,7 @@
 	background-color: #1c1c1c;
 	color: gray;
 	overflow: hidden;
-	table-layout:fixed;
-	word-wrap: break-word;
-	width:40px;
+	width:70px;
 }
 
 #entry-update

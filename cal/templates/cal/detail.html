@@ -1,29 +1,29 @@
 {% load staticfiles %}
 <head>
     <link href="{% static 'bootstrap.css' %}" rel="stylesheet">
+    <link href="{% static 'calendario_app.css' %}" rel="stylesheet">
 </head>
 
-<h3>{{ object.title }}</h3>
-
 <div class="container col-lg-12 col-md-12 col-sm-12 col-xs-12">
-<table class="table table-bordered table-striped">
-    <tr>
-        <td>ID: {{ object.id }}</td>
-    </tr>
-    <tr>
-        <td>Título: {{ object.title }}</td>
-    </tr>
-    <tr>
-        <td>Snippet: {{ object.snippet|default_if_none:"" }}</td>
-    </tr>
-    <tr>
-        <td>Corpo: {{ object.body|default_if_none:"" }}</td>
-    </tr>
-    <tr>
-        <td>Remind?: {{ object.remind|default_if_none:"" }}</td>
-    </tr>
-</table>
-
+    <h1>Entradas</h1>
+    <h3>{{ object.title }}</h3>
+    <table class="table table-bordered table-striped">
+        <tr>
+            <td>ID: {{ object.id }}</td>
+        </tr>
+        <tr>
+            <td>Título: {{ object.title }}</td>
+        </tr>
+        <tr>
+            <td>Dica: {{ object.snippet|default_if_none:"" }}</td>
+        </tr>
+        <tr>
+            <td>Corpo: {{ object.body|default_if_none:"" }}</td>
+        </tr>
+        <tr>
+            <td>Lembrete: {{ object.remind|yesno:"Sim,Não" }}</td>
+        </tr>
+    </table>
 </div>
 
 <div>
