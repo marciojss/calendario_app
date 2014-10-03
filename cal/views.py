@@ -118,7 +118,7 @@ def month(request, year=datetime.now().year,
 
 class EntryCreate(CreateView):
     form_class = EntryForm
-    template_name = 'cal/day2.html'
+    template_name = 'cal/day.html'
 
     def get_context_data(self, **kwargs):
         context = super(EntryCreate, self).get_context_data(**kwargs)
