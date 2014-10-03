@@ -154,7 +154,7 @@ def day(request, year, month, day):
         formset = EntriesFormset(queryset=Entry.objects.filter(date__year=year,
                                  date__month=month, date__day=day,
                                  creator=request.user))
-    return render_to_response("cal/day2.html",
+    return render_to_response("cal/day.html",
                               add_csrf(request, entries=formset,
                                        year=year, month=month, day=day,
                                        other_entries=other_entries,
@@ -163,7 +163,7 @@ def day(request, year, month, day):
 
 class EntryCreate(CreateView):
     form_class = EntryForm
-    template_name = 'cal/day2.html'
+    template_name = 'cal/day.html'
 
     def get_context_data(self, **kwargs):
         context = super(EntryCreate, self).get_context_data(**kwargs)
